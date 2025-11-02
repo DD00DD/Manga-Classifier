@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Manga Genre Predictor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<!-- Legend Box -->
+<div class="legend-box">
+    <h4>Legend</h4>
+    <div class="legend-item"><span class="legend-color predicted"></span> Predicted</div>
+    <div class="legend-item"><span class="legend-color wrong"></span> Wrong Prediction</div>
+    <div class="legend-item"><span class="legend-color actual"></span> Actual</div>
+</div>
+
+<div class="theme-toggle">
+    <button id="toggle-mode">Toggle Light/Dark</button>
+</div>
+
+{% if error_message %}
+<p style="color:red; text-align:center;">{{ error_message }}</p>
+{% endif %}
+
+<div class="container">
+    <!-- Predicted Panel -->
+    <div class="panel" id="predicted-panel">
+        <h2>Predicted Genres</h2>
+        <img src="{{ predicted_cover_url }}" alt="Predicted Cover" class="cover-img">
+        
+        <!-- Title and description -->
+        <div class="manga-info">
+            <h3 class="manga-title">{{ title }}</h3>
+            <p class="manga-description">{{ description }}</p>
+        </div>
+
+        <div id="predicted-genres">
+            {% for genre in predicted_genres %}
+                {% if genre not in actual_genres %}
+                    <span class="genre-card wrong">{{ genre }}</span>
+                {% else %}
+                    <span class="genre-card">{{ genre }}</span>
+                {% endif %}
+            {% endfor %}
+        </div>
+
+        <form method="POST">
+            <input type="text" name="manga_url" placeholder="Enter MangaDex link">
+            <button type="submit">Predict</button>
+        </form>
+    </div>
+
+    <!-- Accuracy Circle -->
+    <div id="accuracy-circle" class="accuracy-circle" data-percent="{{ (accuracy or 0)*100 }}">
+        0%
+    </div>
+
+    <!-- Actual Panel -->
+    <div class="panel" id="actual-panel">
+        <h2>Actual Genres</h2>
+        <img src="{{ actual_cover_url }}" alt="Actual Cover" class="cover-img">
+        
+        <div class="manga-info">
+            <h3 class="manga-title">{{ title }}</h3>
+            <p class="manga-description">{{ description }}</p>
+        </div>
+
+        <div id="actual-genres">
+            {% for genre in actual_genres %}
+            <span class="genre-card actual">{{ genre }}</span>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<script>
+    // Animate Accuracy Circle Number and Fill
+
+    // circle: Gets the <div id="accuracy-circle"> element.
+    // circle.dataset.percent: Reads the data-percent attribute from that element, coverting it to a float (defaulting to 0 if not present).
+    const circle = document.getElementById('accuracy-circle');
+    const target = parseFloat(circle.dataset.percent) || 0;
+
+    // keep track of the animated progress value
+    let current = 0;
+
+    //setInterval(..., 15): Runs the inner code every 15 milliseconds (≈ 60 frames per second).
+    const interval = setInterval(() => {
+
+        //Checks if current >= target:
+        // If yes → stop the animation (clearInterval).
+        // If not → increment current and update visuals.
+        if(current >= target){
+            clearInterval(interval);
+
+            // Updates the number inside the circle
+            circle.textContent = Math.round(target) + "%";
+
+            // Uses a teal color in dark mode, or a bright blue in light mode
+            const fillColor = document.body.classList.contains('dark-mode') ? '#117864' : '#38D7F8';
+
+            // conic-gradient(): Draws the circular fill like a pie chart.
+            //current * 3.6 converts percent to degrees (since 100% = 360°).
+            //Example: If current = 50, it fills half the circle (180°).
+            // radial-gradient(): Adds a subtle center highlight effect. - inner lighting effect
+            // #ddd from ${target*3.6}° → 360° → The unfilled remainder (light gray background of the circle)
+            circle.style.backgroundImage = `radial-gradient(circle at center, rgba(255,255,255,0.15) 0%, transparent 70%), conic-gradient(${fillColor} ${target*3.6}deg, #ddd ${target*3.6}deg 360deg)`;
+        } else {
+            current += 1;
+            circle.textContent = Math.round(current) + "%";
+            const fillColor = document.body.classList.contains('dark-mode') ? '#117864' : '#38D7F8';
+            circle.style.backgroundImage = `radial-gradient(circle at center, rgba(255,255,255,0.15) 0%, transparent 70%), conic-gradient(${fillColor} ${current*3.6}deg, #ddd ${current*3.6}deg 360deg)`;
+        }
+    }, 15);
+
+    // Light/Dark mode toggle
+    document.getElementById('toggle-mode').addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+    });
+</script>
+
+</body>
+</html>

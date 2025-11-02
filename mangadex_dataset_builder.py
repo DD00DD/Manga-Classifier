@@ -177,6 +177,8 @@ def build_dataset(total):
 
                 # Skip entries with neither English nor Japanese titles
                 if not title_en and not title_ja:
+                    pbar.update(1)
+                    time.sleep(0.25)
                     continue
 
                 #genre tags

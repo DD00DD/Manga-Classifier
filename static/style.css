@@ -102,6 +102,29 @@ h2 {
     margin-bottom: 10px;
 }
 
+/* Manga Title & Description */
+.manga-info {
+    text-align: center;
+    margin: 10px 0;
+}
+
+.manga-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin: 5px 0;
+}
+
+.manga-description {
+    font-size: 0.9rem;
+    color: #555;
+    max-height: 100px;
+    overflow: auto;
+}
+
+.dark-mode .manga-description {
+    color: #ccc;
+}
+
 /* Genre Cards */
 .genre-card {
     display: inline-block;
@@ -127,7 +150,7 @@ h2 {
     height: 180px;
     border-radius: 50%;
     position: absolute;
-    top: 50%;
+    top: 30%;
     left: 50%;
     transform: translate(-50%, -50%);
     display: flex;
@@ -139,7 +162,6 @@ h2 {
     text-shadow: 0 1px 3px rgba(0,0,0,0.3);
     z-index: 10;
 
-    /* Border + glow + radial gradient */
     border: 5px solid #2176c7;
     box-shadow: 0 8px 20px rgba(0,0,0,0.25), inset 0 0 15px rgba(0,0,0,0.1);
     background-image: radial-gradient(circle at center, rgba(255,255,255,0.15) 0%, transparent 70%), conic-gradient(#38D7F8 0deg, #ddd 0deg 360deg);

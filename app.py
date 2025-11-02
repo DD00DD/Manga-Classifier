@@ -120,6 +120,8 @@ def index():
     predicted_cover_url = "/static/placeholder.png"
     actual_cover_url = "/static/placeholder.png"
     error_message = None
+    title = ""        # Initialize title
+    description = ""  # Initialize description
 
     if request.method == 'POST':
         manga_url = request.form.get('manga_url')
@@ -138,17 +140,11 @@ def index():
                     accuracy = calculate_accuracy(predicted_genres, actual_genres)
                     predicted_cover_url = actual_cover_url  # For simplicity, same cover
 
-                # Debug prints
-                print("Title:", title)
-                print("Description:", description)
-                print("Predicted genres:", predicted_genres)
-                print("Actual genres:", actual_genres)
-                print("Cover URL:", actual_cover_url)
-
             except Exception as e:
                 print("Error fetching MangaDex data:", e)
                 error_message = "Failed to fetch data from MangaDex. Please try again later."
 
+    # Pass title and description to template
     return render_template(
         'index.html',
         predicted_genres=predicted_genres,
@@ -156,7 +152,9 @@ def index():
         accuracy=accuracy,
         predicted_cover_url=predicted_cover_url,
         actual_cover_url=actual_cover_url,
-        error_message=error_message
+        error_message=error_message,
+        title=title,
+        description=description
     )
 
 if __name__ == '__main__':

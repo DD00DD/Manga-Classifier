@@ -1,0 +1,189 @@
+/* General Body */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f0f2f5;
+    margin: 0;
+    padding: 50px 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.dark-mode {
+    background: #181818;
+    color: #f0f0f0;
+}
+
+/* Theme Toggle */
+.theme-toggle {
+    position: fixed;
+    top: 10px;
+    right: 20px;
+}
+
+/* Legend Box */
+.legend-box {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    background: #fff;
+    padding: 15px 20px;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    z-index: 100;
+}
+
+.dark-mode .legend-box {
+    background: #222;
+    color: #f0f0f0;
+}
+
+.legend-box h4 {
+    margin: 0 0 10px 0;
+    font-size: 1rem;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+}
+
+.legend-color {
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    border-radius: 4px;
+    margin-right: 8px;
+}
+
+.legend-color.predicted { background: #4a90e2; }
+.legend-color.wrong { background: #e74c3c; }
+.legend-color.actual { background: #50e3c2; }
+
+/* Container & Panels */
+.container {
+    display: flex;
+    max-width: 1200px;
+    width: 100%;
+    justify-content: space-between;
+    gap: 20px;
+    position: relative;
+}
+
+.panel {
+    flex: 1;
+    background: #fff;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    min-width: 250px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.dark-mode .panel {
+    background: #222;
+}
+
+/* Titles & Images */
+h2 {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.cover-img {
+    width: 200px;
+    height: auto;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+/* Genre Cards */
+.genre-card {
+    display: inline-block;
+    padding: 8px 15px;
+    margin: 5px;
+    border-radius: 15px;
+    font-size: 0.9rem;
+    color: white;
+    background: #4a90e2;
+}
+
+.genre-card.actual {
+    background: #50e3c2;
+}
+
+.genre-card.wrong {
+    background: #e74c3c;
+}
+
+/* Accuracy Circle */
+.accuracy-circle {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.6rem;
+    font-weight: bold;
+    color: #333;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    z-index: 10;
+
+    /* Border + glow + radial gradient */
+    border: 5px solid #2176c7;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.25), inset 0 0 15px rgba(0,0,0,0.1);
+    background-image: radial-gradient(circle at center, rgba(255,255,255,0.15) 0%, transparent 70%), conic-gradient(#38D7F8 0deg, #ddd 0deg 360deg);
+    transition: background 0.5s, border 0.5s, box-shadow 0.5s;
+}
+
+.dark-mode .accuracy-circle {
+    color: #f0f0f0;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.6);
+    border-color: #117864;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.4), inset 0 0 20px rgba(17,120,100,0.3);
+    background-image: radial-gradient(circle at center, rgba(255,255,255,0.1) 0%, transparent 70%), conic-gradient(#117864 0deg, #333 0deg 360deg);
+}
+
+/* Form Styling */
+form {
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+input[type="text"] {
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 10px 0 0 10px;
+    border: 1px solid #ccc;
+    width: 70%;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    border: none;
+    background: #4a90e2;
+    color: white;
+    border-radius: 0 10px 10px 0;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+button:hover { background: #357ABD; }
+
+/* Responsive Layout */
+@media (max-width: 900px) {
+    .container { flex-direction: column; align-items: center; }
+    .accuracy-circle { position: relative; transform: none; margin: 20px 0; }
+}

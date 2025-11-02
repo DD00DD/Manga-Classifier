@@ -1,0 +1,40 @@
+# Python bytecode
+__pycache__/
+*.py[cod]
+
+# Virtual environment
+.venv/
+env/
+venv/
+
+# Installed packages
+*.egg-info/
+*.egg
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs and temporary files
+*.log
+*.tmp
+
+# Ignore Python compiled directories
+*.pyc
+
+# Coverage reports
+.coverage
+htmlcov/
+
+# IDE/editor settings
+.vscode/
+.idea/
+
+# Ignore Python cache directories
+*.pytest_cache/
+
+# Ignore data files if you don't want to commit large datasets
+# data/

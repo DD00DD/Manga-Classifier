@@ -187,9 +187,10 @@ def build_dataset(total):
                 #description
                 desc = extract_description(attr).replace("\n", " ").replace(",", " ")
 
-                #fetch and download cover image
-                cover_filename = get_cover_filename(manga["id"])
-                img_path = download_cover(manga["id"], cover_filename) if cover_filename else ""
+                #fetch and download cover image (will use in future for CNN model)
+                #cover_filename = get_cover_filename(manga["id"])
+                #img_path = download_cover(manga["id"], cover_filename) if cover_filename else ""
+                img_path = "" # Skipping image download for now to speed up dataset creation
 
                 #Writes a row to the CSV file with all the extracted data.
                 writer.writerow([title_ja, title_en, "|".join(tags), img_path, desc])
@@ -205,4 +206,4 @@ def build_dataset(total):
         pbar.close()
 
 if __name__ == "__main__":
-    build_dataset(500)  # Increase this to collect more manga
+    build_dataset(5000)  # Increase this to collect more manga

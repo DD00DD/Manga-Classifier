@@ -13,7 +13,7 @@ body {
     color: #f0f0f0;
 }
 
-/* Theme Toggle */
+/* Theme Toggle for dark and light mode*/
 .theme-toggle {
     position: fixed;
     top: 10px;
@@ -160,11 +160,18 @@ h2 {
     font-weight: bold;
     color: #333;
     text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+
+    /* Ensures the circle appears above other elements on the page */
     z-index: 10;
 
     border: 5px solid #2176c7;
     box-shadow: 0 8px 20px rgba(0,0,0,0.25), inset 0 0 15px rgba(0,0,0,0.1);
+
+    /* radial-gradient: Adds a subtle circular highlight in the center.
+    conic-gradient: Creates the “fill” effect for your accuracy circle (like a progress pie chart). Initially, it’s empty */
     background-image: radial-gradient(circle at center, rgba(255,255,255,0.15) 0%, transparent 70%), conic-gradient(#38D7F8 0deg, #ddd 0deg 360deg);
+    
+    /* Smooth animations when the background, border, or shadow changes (e.g., when accuracy updates or toggling dark/light mode). */
     transition: background 0.5s, border 0.5s, box-shadow 0.5s;
 }
 
@@ -204,7 +211,7 @@ button {
 
 button:hover { background: #357ABD; }
 
-/* Responsive Layout */
+/* Responsive Layout - how your layout adjusts on smaller screens (like tablets or phones) */
 @media (max-width: 900px) {
     .container { flex-direction: column; align-items: center; }
     .accuracy-circle { position: relative; transform: none; margin: 20px 0; }

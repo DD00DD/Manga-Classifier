@@ -76,14 +76,35 @@
 
 <script>
     // Animate Accuracy Circle Number and Fill
+
+    // circle: Gets the <div id="accuracy-circle"> element.
+    // circle.dataset.percent: Reads the data-percent attribute from that element, coverting it to a float (defaulting to 0 if not present).
     const circle = document.getElementById('accuracy-circle');
     const target = parseFloat(circle.dataset.percent) || 0;
+
+    // keep track of the animated progress value
     let current = 0;
+
+    //setInterval(..., 15): Runs the inner code every 15 milliseconds (≈ 60 frames per second).
     const interval = setInterval(() => {
+
+        //Checks if current >= target:
+        // If yes → stop the animation (clearInterval).
+        // If not → increment current and update visuals.
         if(current >= target){
             clearInterval(interval);
+
+            // Updates the number inside the circle
             circle.textContent = Math.round(target) + "%";
+
+            // Uses a teal color in dark mode, or a bright blue in light mode
             const fillColor = document.body.classList.contains('dark-mode') ? '#117864' : '#38D7F8';
+
+            // conic-gradient(): Draws the circular fill like a pie chart.
+            //current * 3.6 converts percent to degrees (since 100% = 360°).
+            //Example: If current = 50, it fills half the circle (180°).
+            // radial-gradient(): Adds a subtle center highlight effect. - inner lighting effect
+            // #ddd from ${target*3.6}° → 360° → The unfilled remainder (light gray background of the circle)
             circle.style.backgroundImage = `radial-gradient(circle at center, rgba(255,255,255,0.15) 0%, transparent 70%), conic-gradient(${fillColor} ${target*3.6}deg, #ddd ${target*3.6}deg 360deg)`;
         } else {
             current += 1;

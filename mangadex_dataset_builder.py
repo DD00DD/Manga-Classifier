@@ -57,8 +57,6 @@ def safe_get(url, params=None, retries=3, delay=1.0):
     #If all retries fail, this raises an HTTPError with details about why the request failed
     response.raise_for_status()
 
-
-
 #limit: Maximum number of manga entries to fetch in one request (default is 100).
 #offset: How many entries to skip before starting (default is 0). Useful for pagination
 #Function: fetches a list of manga from the MangaDex API.
@@ -81,31 +79,25 @@ def get_manga_list(limit=100, offset=0):
 
     #Converts the API response from JSON (text) into a Python dictionary.
     return resp.json()
-    
-
-#relationships: The relationships field from a manga entry, which contains related entities like authors and cover art.
-#Function: extracts the author name from the relationships field.
-def get_author_name(relationships):
-    """Extracts the author name from the relationships field."""
-    for rel in relationships:
-        if rel.get("type") == "author":
-
-            #Accesses the "name" field inside "attributes", Accesses the "name" field inside "attributes"
-            return rel["attributes"]["name"].replace(",", " ")
-    
-    # if no author found, return "unknown"
-    return "unknown"
 
 #relationships: The relationships field from a manga entry, which contains related entities like authors and cover art.
 #Function: extracts the cover filename from the relationships field.
-def get_cover_filename(relationships):
-    """Extracts the cover filename from the relationships field."""
-    for rel in relationships:
-        if rel.get("type") == "cover_art":
 
-            #this contains the actual filename of the cover image and returns it
-            return rel["attributes"]["fileName"]
-    return None
+def get_cover_filename(manga_id): 
+    #Sends a GET request to the MangaDex API endpoint for covers: https://api.mangadex.org/cover, with a query parameter specifying the manga cover ID. 
+    resp = safe_get(f"{API_URL}/cover", params={"manga[]": manga_id}) 
+    
+    #Converts the response to a Python dictionary using .json(), If "data", which contains cover information, does not exist, it defaults to an empty list []. 
+    data = resp.json().get("data", []) 
+    
+    #If no cover exists, the function returns None. 
+    if not data: 
+        return None
+    
+    # Accesses the first cover in the data list. Retrieves the "fileName" field from "attributes". 
+    # This filename is what you append to the IMG_URL to download the actual cover image. 
+    # #idk if this is correc***** 
+    return data[0]["attributes"]["fileName"]
 
 #manga_id: The unique identifier for the manga whose cover image you want to download.
 #filename: The filename of the cover image to download.
@@ -158,7 +150,7 @@ def build_dataset(total):
         writer = csv.writer(csvfile)
 
         #Writes the header row with following columns headers
-        writer.writerow(["author", "title_ja", "title_en", "tags", "cover_image_path", "description"])
+        writer.writerow(["title_ja", "title_en", "tags", "cover_image_path", "description"])
 
 
         #Pagination is a concept used when dealing with large amounts of data from APIs, databases, or web pages. Instead of fetching all data at once, you split it into smaller chunks (pages) and retrieve them one at a time.
@@ -179,9 +171,6 @@ def build_dataset(total):
             for manga in data.get("data", []):
                 attr = manga["attributes"]
 
-                #safely retrieves that list of relationships associated with the manga.
-                relationships = manga.get("relationships", [])
-
                 #english title and japanese title
                 title_en = attr["title"].get("en", "").replace(",", " ").strip()
                 title_ja = attr["title"].get("ja", "").replace(",", " ").strip()
@@ -190,11 +179,6 @@ def build_dataset(total):
                 if not title_en and not title_ja:
                     continue
 
-                author = get_author_name(relationships)
-                if not author or author.lower() == "unknown":
-                    continue
-
-
                 #genre tags
                 tags = [t["attributes"]["name"]["en"] for t in attr["tags"]]
 
@@ -202,7 +186,7 @@ def build_dataset(total):
                 desc = extract_description(attr).replace("\n", " ").replace(",", " ")
 
                 #fetch and download cover image
-                cover_filename = get_cover_filename(relationships)
+                cover_filename = get_cover_filename(manga["id"])
                 img_path = download_cover(manga["id"], cover_filename) if cover_filename else ""
 
                 #Writes a row to the CSV file with all the extracted data.
